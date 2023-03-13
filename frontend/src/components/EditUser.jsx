@@ -1,6 +1,6 @@
 import { FormGroup, FormControl, Input, InputLabel, Typography, styled, Button } from "@mui/material";
 import {useState,useEffect} from 'react'
-import { addUser, getUser } from "../service/api";
+import { editUser, getUser } from "../service/api";
 import {useNavigate, useParams} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 
@@ -23,7 +23,6 @@ const EditUser=()=>{
     const [user, setUser]=useState(defaultValue);
     
     const navigate=useNavigate;
-
     const id= useParams();
 
     useEffect(()=>{
@@ -32,6 +31,7 @@ const EditUser=()=>{
 
     const loadUserDetails = async ()=>{
         const response=await getUser(id);
+        setUser(response.data);
     }
 
     const onValuechange=(e)=>{
@@ -39,8 +39,8 @@ const EditUser=()=>{
         navigate('/allusers/');
     }
 
-    const addUserDetails=async ()=>{
-        await addUser (user);
+    const editUserDetails=async ()=>{
+        await editUser (user,id);
     }
 
 
@@ -49,22 +49,22 @@ const EditUser=()=>{
             <Typography variant="h4">Edit User</Typography>
             <FormControl>
                 <InputLabel>Full Name</InputLabel>
-                <Input onChange={(e)=>onValuechange(e)} name="Name"/>
+                <Input onChange={(e)=>onValuechange(e)} name="Name" value={user.name}/>
             </FormControl>
             <FormControl>
                 <InputLabel>UserName</InputLabel>
-                <Input onChange={(e)=>onValuechange(e)} name="UserName"/>
+                <Input onChange={(e)=>onValuechange(e)} name="UserName" value={user.username}/>
             </FormControl>
             <FormControl>
                 <InputLabel>Email</InputLabel>
-                <Input onChange={(e)=>onValuechange(e)} name="Email"/>
+                <Input onChange={(e)=>onValuechange(e)} name="Email" value={user.email}/>
             </FormControl>
             <FormControl>
                 <InputLabel>Phone</InputLabel>
-                <Input onChange={(e)=>onValuechange(e)} name="Phone"/>
+                <Input onChange={(e)=>onValuechange(e)} name="Phone" value={user.phone}/>
             </FormControl>
             <FormControl>
-                <Button variant="contained" onClick={()=>addUserDetails()} component={Link} to={`/edituser/${user._id}`} >EDIT USER</Button>
+                <Button variant="contained" onClick={()=>editUserDetails()} component={Link} to={`/edit/${user._id}`} >EDIT USER</Button>
             </FormControl>
         </Container>
     )

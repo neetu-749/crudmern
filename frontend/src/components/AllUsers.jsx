@@ -25,8 +25,6 @@ const TBody = styled(TableRow)`
     }
 `;
 
-
-
 const AllUser = () => {
 
     const [users, setUsers]=useState([]);
@@ -35,17 +33,20 @@ const AllUser = () => {
         getAllUsers();
     },[]);
 
-    const deleteUserData = async (id) => {
-        await deleteUser(id);
-        getAllUsers();
-    }
+    // const deleteUserData = async (id) => {
+    //     await deleteUser(id);
+    //     getAllUsers();
+    // }
 
     const getAllUsers=async()=>{
         let response = await getUsers();
-        setUsers(response.data);
-        
+        setUsers(response.data);       
     }
-    console.log(users);
+
+    const deleteUserDetails=async(id)=>{
+        await deleteUser(id);
+        getAllUsers();
+    }
 
 
     return (
@@ -62,19 +63,17 @@ const AllUser = () => {
             </TableHead>
             <TableBody>
                 {
-                    users.map((user)=>{
-                        
+                    users.map((user)=>{                 
                     return (
-                        <TBody>
-                            
+                        <TBody key={user._id}>                  
                             <TableCell>{user._id}</TableCell>
                             <TableCell>{user.name}</TableCell>
                             <TableCell>{user.username}</TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.phone}</TableCell>
                             <TableCell>
-                                <Button color="primary" variant="contained" style={{marginRight:10}} component={Link} to={`/edit/${user._id}`}>Edit</Button> {/* change it to user.id to use JSON Server */}
-                                <Button color="secondary" variant="contained" onClick={() => deleteUserData(user._id)}>Delete</Button> {/* change it to user.id to use JSON Server */}
+                                <Button color="primary" variant="contained" style={{marginRight:10}} component={Link} to={`/edit/${user._id}`}>Edit</Button> 
+                                <Button color="secondary" variant="contained" onClick={() => deleteUserDetails(user._id)}>Delete</Button> 
                         </TableCell>
                         </TBody>)
                     })
